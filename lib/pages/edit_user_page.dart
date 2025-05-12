@@ -21,6 +21,8 @@ class _EditUserPageState extends State<EditUserPage> {
   final TextEditingController email = TextEditingController();
   String? gender;
 
+  bool _isDataLoaded = false;
+
   // Fungsi untuk mengupdate user ketika tombol "Update User" diklik
   Future<void> _updateUser(BuildContext context) async {
     try {
@@ -93,46 +95,60 @@ class _EditUserPageState extends State<EditUserPage> {
         // Jika berhasil memanggil API (ada datanya)
         else if (snapshot.hasData) {
           /*
-            Baris 1:
-            Untuk mengambil response dari API, kita bisa mengakses "snapshot.data"
-            Nah, snapshot.data tadi itu bentuknya masih berupa Map<String, dynamic>.
+            Jika data belum pernah di-load sama sekali (baru pertama kali),
+            maka program akan masuk ke dalam percabangan ini.
 
-            Untuk memudahkan pengolahan data, 
-            kita perlu mengonversi data JSON tersebut ke dalam model Dart (User),
-            makanya kita pake method User.fromJSON() buat mengonversinya.
-            Setelah itu, hasil konversinya disimpan ke dalam variabel bernama "user".
-            
-            Kenapa yg kita simpan "snapshot.data["data"]" bukan "snapshot.data" aja?
-            Karena kalau kita lihat di dokumentasi API, bentuk response-nya itu kaya gini:
-            {
-              "status": ...
-              "message": ...
-              "data": {
-                "id": 1,
-                "name": "rafli",
-                "email": "rafli@gmail.com",
-                "gender": "Male",
-                "createdAt": "2025-04-29T13:17:17.000Z",
-                "updatedAt": "2025-04-29T13:17:17.000Z"
-              },
-            }
-
-            Nah, kita itu cuman mau ngambil properti "data" doang, 
-            kita gamau ngambil properti "status" dan "message",
-            makanya yg kita simpan ke variabel user itu response.data["data"]
-
-            Baris 2-4
-            Setelah mendapatkan data user yg dipilih,
-            masukkan data tadi sebagai nilai default pada tiap-tiap input
-
-            Baris 5:
-            Setelah dikonversi, tampilkan data tadi di widget bernama "_user()"
-            dengan mengirimkan data tadi sebagai parameternya.
+            Mengapa perlu dicek? Karena setiap kali layar mengupdate state menggunakan setState(),
+            Widget ini akan terus dijalankan berulang-ulang.
+            Untuk mencegah pengambilan data berulang-ulang, kita perlu mengecek
+            apakah data sudah pernah diambil atau belum.
           */
-          User user = User.fromJson(snapshot.data!["data"]);
-          name.text = user.name!;
-          email.text = user.email!;
-          gender = user.gender!;
+          if (!_isDataLoaded) {
+            // Jika data baru pertama kali di-load, ubah menjadi true
+            _isDataLoaded = true;
+
+            /*
+              Baris 1:
+              Untuk mengambil response dari API, kita bisa mengakses "snapshot.data"
+              Nah, snapshot.data tadi itu bentuknya masih berupa Map<String, dynamic>.
+
+              Untuk memudahkan pengolahan data, 
+              kita perlu mengonversi data JSON tersebut ke dalam model Dart (User),
+              makanya kita pake method User.fromJSON() buat mengonversinya.
+              Setelah itu, hasil konversinya disimpan ke dalam variabel bernama "user".
+              
+              Kenapa yg kita simpan "snapshot.data["data"]" bukan "snapshot.data" aja?
+              Karena kalau kita lihat di dokumentasi API, bentuk response-nya itu kaya gini:
+              {
+                "status": ...
+                "message": ...
+                "data": {
+                  "id": 1,
+                  "name": "rafli",
+                  "email": "rafli@gmail.com",
+                  "gender": "Male",
+                  "createdAt": "2025-04-29T13:17:17.000Z",
+                  "updatedAt": "2025-04-29T13:17:17.000Z"
+                },
+              }
+
+              Nah, kita itu cuman mau ngambil properti "data" doang, 
+              kita gamau ngambil properti "status" dan "message",
+              makanya yg kita simpan ke variabel user itu response.data["data"]
+
+              Baris 2-4
+              Setelah mendapatkan data user yg dipilih,
+              masukkan data tadi sebagai nilai default pada tiap-tiap input
+
+              Baris 5:
+              Setelah dikonversi, tampilkan data tadi di widget bernama "_user()"
+              dengan mengirimkan data tadi sebagai parameternya.
+            */
+            User user = User.fromJson(snapshot.data!["data"]);
+            name.text = user.name!;
+            email.text = user.email!;
+            gender = user.gender!;
+          }
 
           return _userEditForm(context);
         }
