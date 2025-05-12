@@ -63,19 +63,20 @@ class DetailUserPage extends StatelessWidget {
 
             Nah, kita itu cuman mau ngambil properti "data" doang, 
             kita gamau ngambil properti "status" dan "message",
-            makanya yg kita kirim ke Widget _user itu response.data
+            makanya yg kita simpan ke variabel user itu response.data["data"]
 
 
             Baris 2:
-            Setelah dikonveri, tampilkan data tadi di widget bernama "_user()"
+            Setelah dikonversi, tampilkan data tadi di widget bernama "_user()"
             dengan mengirimkan data tadi sebagai parameternya.
           */
           User user = User.fromJson(snapshot.data!["data"]);
           return _user(user);
         }
-
         // Jika masih loading, tampilkan loading screen di tengah layar
-        return const Center(child: CircularProgressIndicator());
+        else {
+          return const Center(child: CircularProgressIndicator());
+        }
       },
     );
   }

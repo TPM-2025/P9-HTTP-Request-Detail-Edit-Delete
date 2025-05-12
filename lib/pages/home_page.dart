@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
             Setelah itu, hasil konversinya disimpan ke dalam variabel bernama "response".
 
             Baris 2:
-            Setelah dikonveri, tampilkan data tadi di widget bernama "_userlist()"
+            Setelah dikonversi, tampilkan data tadi di widget bernama "_userlist()"
             dengan mengirimkan data tadi sebagai parameternya.
 
             Kenapa yg dikirim "response.data" bukan "response" aja?
@@ -82,9 +82,10 @@ class _HomePageState extends State<HomePage> {
           UserModel response = UserModel.fromJson(snapshot.data!);
           return _userList(context, response.data!);
         }
-
         // Jika masih loading, tampilkan loading screen di tengah layar
-        return const Center(child: CircularProgressIndicator());
+        else {
+          return const Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
@@ -136,12 +137,16 @@ class _HomePageState extends State<HomePage> {
                     // Tombol edit
                     ElevatedButton(
                       onPressed: () {
-                        // Pindah ke halaman EditUserPage() (edit_user_page.dart)
+                        /*
+                          Pindah ke halaman EditUserPage() (edit_user_page.dart)
+                          Karena kita mau mengubah user yg dipilih berdasarkan id-nya, 
+                          maka beri parameter berupa id yg dipilih
+                        */
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder:
                                 (BuildContext context) =>
-                                    EditUserPage(user: user),
+                                    EditUserPage(id: user.id!),
                           ),
                         );
                       },
@@ -162,7 +167,11 @@ class _HomePageState extends State<HomePage> {
                     // Tombol detail
                     ElevatedButton(
                       onPressed: () {
-                        // Pindah ke halaman DetailUserPage() (detail_user_page.dart)
+                        /*
+                          Pindah ke halaman DetailUserPage() (detail_user_page.dart)
+                          Karena kita mau menampilkan detail user yg dipilih berdasarkan id-nya, 
+                          maka beri parameter berupa id yg dipilih
+                        */
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder:

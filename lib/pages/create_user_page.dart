@@ -49,7 +49,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
           context,
         ).showSnackBar(SnackBar(content: Text("Berhasil menambah user baru")));
 
+        // Pindah ke halaman sebelumnya
         Navigator.pop(context);
+
+        // Untuk merefresh tampilan (menampilkan user baru ke dalam daftar)
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (BuildContext context) => const HomePage(),
