@@ -113,7 +113,7 @@ class UserApi {
   }
 
   // Method buat menghapus user berdasarkan id
-  static Future<Map<String, dynamic>> deleteUser(String id) async {
+  static Future<Map<String, dynamic>> deleteUser(int id) async {
     // Mengirim DELETE request ke url, kemudian disimpan ke dalam variabel "response"
     final response = await http.delete(Uri.parse("$url/$id"));
 

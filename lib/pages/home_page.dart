@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                           jalankan fungsi _deleteUser() dengan memberi
                           parameter berupa id yg dipilih
                         */
-                        _deleteUser(user.id.toString());
+                        _deleteUser(user.id!);
                       },
                       child: Text("Delete"),
                     ),
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Fungsi untuk menghapus user ketika tombol "Delete User" diklik
-  void _deleteUser(String id) async {
+  void _deleteUser(int id) async {
     try {
       /*
         Lakukan pemanggilan API delete, setelah itu
