@@ -20,59 +20,6 @@ class _CreateUserPageState extends State<CreateUserPage> {
   final email = TextEditingController();
   String? gender;
 
-  // Fungsi untuk membuat user ketika tombol "Create User" diklik
-  Future<void> _createUser(BuildContext context) async {
-    try {
-      /*
-        Karena kita mau membuat user, maka kita juga perlu datanya.
-        Disini kita mengambil data nama, email, & gender yang dah diisi pada form,
-        Terus datanya itu disimpan ke dalam variabel "newUser" dengan tipe data User.
-      */
-      User newUser = User(
-        name: name.text.trim(),
-        email: email.text.trim(),
-        gender: gender,
-      );
-
-      /*
-        Lakukan pemanggilan API create, setelah itu
-        simpan ke dalam variabel bernama "response"
-      */
-      final response = await UserApi.createUser(newUser);
-
-      /*
-        Jika response status "Success", 
-        maka tampilkan snackbar yg bertuliskan "Berhasil menambah user baru"
-      */
-      if (response["status"] == "Success") {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Berhasil menambah user baru")));
-
-        // Pindah ke halaman sebelumnya
-        Navigator.pop(context);
-
-        // Untuk merefresh tampilan (menampilkan user baru ke dalam daftar)
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) => const HomePage(),
-          ),
-        );
-      } else {
-        // Jika response status "Error", maka kode akan dilempar ke bagian catch
-        throw Exception(response["message"]);
-      }
-    } catch (error) {
-      /*
-        Jika user gagal menghapus, 
-        maka tampilkan snackbar dengan tulisan "Gagal: error-nya apa"
-      */
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Gagal: $error")));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,5 +99,58 @@ class _CreateUserPageState extends State<CreateUserPage> {
         ),
       ),
     );
+  }
+
+  // Fungsi untuk membuat user ketika tombol "Create User" diklik
+  Future<void> _createUser(BuildContext context) async {
+    try {
+      /*
+        Karena kita mau membuat user, maka kita juga perlu datanya.
+        Disini kita mengambil data nama, email, & gender yang dah diisi pada form,
+        Terus datanya itu disimpan ke dalam variabel "newUser" dengan tipe data User.
+      */
+      User newUser = User(
+        name: name.text.trim(),
+        email: email.text.trim(),
+        gender: gender,
+      );
+
+      /*
+        Lakukan pemanggilan API create, setelah itu
+        simpan ke dalam variabel bernama "response"
+      */
+      final response = await UserApi.createUser(newUser);
+
+      /*
+        Jika response status "Success", 
+        maka tampilkan snackbar yg bertuliskan "Berhasil menambah user baru"
+      */
+      if (response["status"] == "Success") {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Berhasil menambah user baru")));
+
+        // Pindah ke halaman sebelumnya
+        Navigator.pop(context);
+
+        // Untuk merefresh tampilan (menampilkan user baru ke dalam daftar)
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage(),
+          ),
+        );
+      } else {
+        // Jika response status "Error", maka kode akan dilempar ke bagian catch
+        throw Exception(response["message"]);
+      }
+    } catch (error) {
+      /*
+        Jika user gagal mengirimkan data, 
+        maka tampilkan snackbar dengan tulisan "Gagal: error-nya apa"
+      */
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal: $error")));
+    }
   }
 }

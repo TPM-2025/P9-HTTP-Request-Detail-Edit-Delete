@@ -65,7 +65,6 @@ class DetailUserPage extends StatelessWidget {
             kita gamau ngambil properti "status" dan "message",
             makanya yg kita simpan ke variabel user itu response.data["data"]
 
-
             Baris 2:
             Setelah dikonversi, tampilkan data tadi di widget bernama "_user()"
             dengan mengirimkan data tadi sebagai parameternya.

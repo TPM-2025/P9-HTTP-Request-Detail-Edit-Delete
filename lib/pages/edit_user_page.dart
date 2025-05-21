@@ -23,59 +23,6 @@ class _EditUserPageState extends State<EditUserPage> {
 
   bool _isDataLoaded = false;
 
-  // Fungsi untuk mengupdate user ketika tombol "Update User" diklik
-  Future<void> _updateUser(BuildContext context) async {
-    try {
-      /*
-        Karena kita mau mengedit user, maka kita juga perlu data yg baru.
-        Disini kita mengambil data nama, email, & gender yang dah diisi pada form,
-        Terus datanya itu disimpan ke dalam variabel "updatedUser" dengan tipe data User.
-      */
-      User updatedUser = User(
-        name: name.text.trim(),
-        email: email.text.trim(),
-        gender: gender,
-      );
-
-      /*
-        Lakukan pemanggilan API update, setelah itu
-        simpan ke dalam variabel bernama "response"
-      */
-      final response = await UserApi.updateUser(updatedUser, widget.id);
-
-      /*
-        Jika response status "Success", 
-        maka tampilkan snackbar yg bertuliskan "Berhasil mengubah user [nama_user]"
-      */
-      if (response["status"] == "Success") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Berhasil mengubah user ${updatedUser.name}")),
-        );
-
-        // Pindah ke halaman sebelumnya
-        Navigator.pop(context);
-
-        // Untuk merefresh tampilan (menampilkan data user yg telah diedit ke dalam daftar)
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) => const HomePage(),
-          ),
-        );
-      } else {
-        // Jika response status "Error", maka kode akan dilempar ke bagian catch
-        throw Exception(response["message"]);
-      }
-    } catch (error) {
-      /*
-        Jika user gagal menghapus, 
-        maka tampilkan snackbar dengan tulisan "Gagal: error-nya apa"
-      */
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Gagal: $error")));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,10 +86,6 @@ class _EditUserPageState extends State<EditUserPage> {
               Baris 2-4
               Setelah mendapatkan data user yg dipilih,
               masukkan data tadi sebagai nilai default pada tiap-tiap input
-
-              Baris 5:
-              Setelah dikonversi, tampilkan data tadi di widget bernama "_user()"
-              dengan mengirimkan data tadi sebagai parameternya.
             */
             User user = User.fromJson(snapshot.data!["data"]);
             name.text = user.name!;
@@ -232,5 +175,58 @@ class _EditUserPageState extends State<EditUserPage> {
         ),
       ],
     );
+  }
+
+  // Fungsi untuk mengupdate user ketika tombol "Update User" diklik
+  Future<void> _updateUser(BuildContext context) async {
+    try {
+      /*
+        Karena kita mau mengedit user, maka kita juga perlu data yg baru.
+        Disini kita mengambil data nama, email, & gender yang dah diisi pada form,
+        Terus datanya itu disimpan ke dalam variabel "updatedUser" dengan tipe data User.
+      */
+      User updatedUser = User(
+        name: name.text.trim(),
+        email: email.text.trim(),
+        gender: gender,
+      );
+
+      /*
+        Lakukan pemanggilan API update, setelah itu
+        simpan ke dalam variabel bernama "response"
+      */
+      final response = await UserApi.updateUser(updatedUser, widget.id);
+
+      /*
+        Jika response status "Success", 
+        maka tampilkan snackbar yg bertuliskan "Berhasil mengubah user [nama_user]"
+      */
+      if (response["status"] == "Success") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Berhasil mengubah user ${updatedUser.name}")),
+        );
+
+        // Pindah ke halaman sebelumnya
+        Navigator.pop(context);
+
+        // Untuk merefresh tampilan (menampilkan data user yg telah diedit ke dalam daftar)
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage(),
+          ),
+        );
+      } else {
+        // Jika response status "Error", maka kode akan dilempar ke bagian catch
+        throw Exception(response["message"]);
+      }
+    } catch (error) {
+      /*
+        Jika user gagal mengirimkan data, 
+        maka tampilkan snackbar dengan tulisan "Gagal: error-nya apa"
+      */
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal: $error")));
+    }
   }
 }
